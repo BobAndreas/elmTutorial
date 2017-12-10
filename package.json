@@ -1,0 +1,19 @@
+{
+  "name": "elmtutorial",
+  "version": "1.0.0",
+  "description": "Little test building an elm app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "tutorial"
+  ],
+  "author": "andre",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "elm": "^0.18.0",
+    "mkdirp": "^0.5.1",
+    "underscore": "^1.8.3"
+  }
+}
