@@ -1,0 +1,314 @@
+var _bobandreas$elmtutorial$Main$showWarning = F3(
+	function (etype, error, msg) {
+		showWarning:
+		while (true) {
+			var _p0 = error;
+			if (_p0.ctor === 'Existing') {
+				if (_elm_lang$core$Native_Utils.eq(_p0._0, etype)) {
+					return A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$style(
+								{
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'color', _1: 'red'},
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(msg),
+							_1: {ctor: '[]'}
+						});
+				} else {
+					var _v1 = etype,
+						_v2 = _p0._1,
+						_v3 = msg;
+					etype = _v1;
+					error = _v2;
+					msg = _v3;
+					continue showWarning;
+				}
+			} else {
+				return A2(
+					_elm_lang$html$Html$div,
+					{ctor: '[]'},
+					{ctor: '[]'});
+			}
+		}
+	});
+var _bobandreas$elmtutorial$Main$defaultWarning = function (errorType) {
+	var _p1 = errorType;
+	switch (_p1.ctor) {
+		case 'PwToShort':
+			return 'PasswordToShort';
+		case 'PwDontMatch':
+			return 'Password and confirmation don\'t match';
+		case 'NameTooLong':
+			return 'Name is too long';
+		default:
+			return 'Age is not a whole number';
+	}
+};
+var _bobandreas$elmtutorial$Main$showDefaultWarning = F2(
+	function (errorType, error) {
+		return A3(
+			_bobandreas$elmtutorial$Main$showWarning,
+			errorType,
+			error,
+			_bobandreas$elmtutorial$Main$defaultWarning(errorType));
+	});
+var _bobandreas$elmtutorial$Main$Model = F5(
+	function (a, b, c, d, e) {
+		return {name: a, password: b, passwordAgain: c, age: d, error: e};
+	});
+var _bobandreas$elmtutorial$Main$AgeNaN = {ctor: 'AgeNaN'};
+var _bobandreas$elmtutorial$Main$NameTooLong = {ctor: 'NameTooLong'};
+var _bobandreas$elmtutorial$Main$PwDontMatch = {ctor: 'PwDontMatch'};
+var _bobandreas$elmtutorial$Main$PwToShort = {ctor: 'PwToShort'};
+var _bobandreas$elmtutorial$Main$possibleErrors = {
+	ctor: '::',
+	_0: {
+		ctor: '_Tuple2',
+		_0: function (model) {
+			return _elm_lang$core$Native_Utils.cmp(
+				_elm_lang$core$String$length(model.password),
+				8) < 0;
+		},
+		_1: _bobandreas$elmtutorial$Main$PwToShort
+	},
+	_1: {
+		ctor: '::',
+		_0: {
+			ctor: '_Tuple2',
+			_0: function (model) {
+				return !_elm_lang$core$Native_Utils.eq(model.password, model.passwordAgain);
+			},
+			_1: _bobandreas$elmtutorial$Main$PwDontMatch
+		},
+		_1: {
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple2',
+				_0: function (model) {
+					return _elm_lang$core$Native_Utils.cmp(
+						_elm_lang$core$String$length(model.name),
+						20) > 0;
+				},
+				_1: _bobandreas$elmtutorial$Main$NameTooLong
+			},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: function (model) {
+						var _p2 = _elm_lang$core$String$toInt(model.age);
+						if (_p2.ctor === 'Err') {
+							return true;
+						} else {
+							return false;
+						}
+					},
+					_1: _bobandreas$elmtutorial$Main$AgeNaN
+				},
+				_1: {ctor: '[]'}
+			}
+		}
+	}
+};
+var _bobandreas$elmtutorial$Main$Existing = F2(
+	function (a, b) {
+		return {ctor: 'Existing', _0: a, _1: b};
+	});
+var _bobandreas$elmtutorial$Main$NoError = {ctor: 'NoError'};
+var _bobandreas$elmtutorial$Main$model = A5(_bobandreas$elmtutorial$Main$Model, '', '', '', '', _bobandreas$elmtutorial$Main$NoError);
+var _bobandreas$elmtutorial$Main$checkModel = function (model) {
+	return A3(
+		_elm_lang$core$List$foldl,
+		F2(
+			function (_p3, prevError) {
+				var _p4 = _p3;
+				return _p4._0(model) ? A2(_bobandreas$elmtutorial$Main$Existing, _p4._1, prevError) : prevError;
+			}),
+		_bobandreas$elmtutorial$Main$NoError,
+		_bobandreas$elmtutorial$Main$possibleErrors);
+};
+var _bobandreas$elmtutorial$Main$update = F2(
+	function (msg, model) {
+		var _p5 = msg;
+		switch (_p5.ctor) {
+			case 'Name':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{name: _p5._0});
+			case 'Password':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{password: _p5._0});
+			case 'PasswordAgain':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{passwordAgain: _p5._0});
+			case 'Age':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{age: _p5._0});
+			default:
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						error: _bobandreas$elmtutorial$Main$checkModel(model)
+					});
+		}
+	});
+var _bobandreas$elmtutorial$Main$Submit = {ctor: 'Submit'};
+var _bobandreas$elmtutorial$Main$Age = function (a) {
+	return {ctor: 'Age', _0: a};
+};
+var _bobandreas$elmtutorial$Main$PasswordAgain = function (a) {
+	return {ctor: 'PasswordAgain', _0: a};
+};
+var _bobandreas$elmtutorial$Main$Password = function (a) {
+	return {ctor: 'Password', _0: a};
+};
+var _bobandreas$elmtutorial$Main$Name = function (a) {
+	return {ctor: 'Name', _0: a};
+};
+var _bobandreas$elmtutorial$Main$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$input,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$type_('text'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$placeholder('Name'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onInput(_bobandreas$elmtutorial$Main$Name),
+							_1: {ctor: '[]'}
+						}
+					}
+				},
+				{ctor: '[]'}),
+			_1: {
+				ctor: '::',
+				_0: A2(_bobandreas$elmtutorial$Main$showDefaultWarning, _bobandreas$elmtutorial$Main$NameTooLong, model.error),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$input,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$type_('password'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$placeholder('Password'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onInput(_bobandreas$elmtutorial$Main$Password),
+											_1: {ctor: '[]'}
+										}
+									}
+								},
+								{ctor: '[]'}),
+							_1: {
+								ctor: '::',
+								_0: A2(_bobandreas$elmtutorial$Main$showDefaultWarning, _bobandreas$elmtutorial$Main$PwToShort, model.error),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$input,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$type_('password'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$placeholder('Re-enter Password'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onInput(_bobandreas$elmtutorial$Main$PasswordAgain),
+												_1: {ctor: '[]'}
+											}
+										}
+									},
+									{ctor: '[]'}),
+								_1: {
+									ctor: '::',
+									_0: A2(_bobandreas$elmtutorial$Main$showDefaultWarning, _bobandreas$elmtutorial$Main$PwDontMatch, model.error),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$input,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$type_('Age'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$placeholder('Enter your age'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onInput(_bobandreas$elmtutorial$Main$Age),
+													_1: {ctor: '[]'}
+												}
+											}
+										},
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: A2(_bobandreas$elmtutorial$Main$showDefaultWarning, _bobandreas$elmtutorial$Main$AgeNaN, model.error),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$button,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onClick(_bobandreas$elmtutorial$Main$Submit),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('submit'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}
+			}
+		});
+};
+var _bobandreas$elmtutorial$Main$main = _elm_lang$html$Html$beginnerProgram(
+	{model: _bobandreas$elmtutorial$Main$model, view: _bobandreas$elmtutorial$Main$view, update: _bobandreas$elmtutorial$Main$update})();
