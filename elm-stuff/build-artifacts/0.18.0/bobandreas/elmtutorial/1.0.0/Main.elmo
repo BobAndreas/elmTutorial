@@ -48,8 +48,10 @@ var _bobandreas$elmtutorial$Main$defaultWarning = function (errorType) {
 			return 'Password and confirmation don\'t match';
 		case 'NameTooLong':
 			return 'Name is too long';
-		default:
+		case 'AgeNaN':
 			return 'Age is not a whole number';
+		default:
+			return 'Passwords should contain lower & upper case as well as numbers';
 	}
 };
 var _bobandreas$elmtutorial$Main$showDefaultWarning = F2(
@@ -64,6 +66,7 @@ var _bobandreas$elmtutorial$Main$Model = F5(
 	function (a, b, c, d, e) {
 		return {name: a, password: b, passwordAgain: c, age: d, error: e};
 	});
+var _bobandreas$elmtutorial$Main$PwNotSafe = {ctor: 'PwNotSafe'};
 var _bobandreas$elmtutorial$Main$AgeNaN = {ctor: 'AgeNaN'};
 var _bobandreas$elmtutorial$Main$NameTooLong = {ctor: 'NameTooLong'};
 var _bobandreas$elmtutorial$Main$PwDontMatch = {ctor: 'PwDontMatch'};
@@ -113,7 +116,17 @@ var _bobandreas$elmtutorial$Main$possibleErrors = {
 					},
 					_1: _bobandreas$elmtutorial$Main$AgeNaN
 				},
-				_1: {ctor: '[]'}
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: function (model) {
+							return (!A2(_elm_lang$core$String$any, _elm_lang$core$Char$isUpper, model.password)) || ((!A2(_elm_lang$core$String$any, _elm_lang$core$Char$isLower, model.password)) || (!A2(_elm_lang$core$String$any, _elm_lang$core$Char$isDigit, model.password)));
+						},
+						_1: _bobandreas$elmtutorial$Main$PwNotSafe
+					},
+					_1: {ctor: '[]'}
+				}
 			}
 		}
 	}
@@ -227,7 +240,11 @@ var _bobandreas$elmtutorial$Main$view = function (model) {
 							_1: {
 								ctor: '::',
 								_0: A2(_bobandreas$elmtutorial$Main$showDefaultWarning, _bobandreas$elmtutorial$Main$PwToShort, model.error),
-								_1: {ctor: '[]'}
+								_1: {
+									ctor: '::',
+									_0: A2(_bobandreas$elmtutorial$Main$showDefaultWarning, _bobandreas$elmtutorial$Main$PwNotSafe, model.error),
+									_1: {ctor: '[]'}
+								}
 							}
 						}),
 					_1: {
